@@ -11,9 +11,9 @@ export const Hold = ({ heldPiece, canHold }) => {
       row.map((cell, x) => {
         if (!cell) return null;
         
-        // Center the piece in the 4x4 grid
-        const offsetX = type === 'I' || type === 'O' ? 8 : 10;
-        const offsetY = type === 'I' ? 6 : 8;
+        // Center the piece in the 5x5 grid (120px / 24 = 5 cells wide)
+        const offsetX = type === 'I' || type === 'O' ? 6 : 7;
+        const offsetY = type === 'I' ? 3 : 4;
         
         const boardX = offsetX + x * CELL_SIZE;
         const boardY = offsetY + y * CELL_SIZE;
@@ -45,14 +45,14 @@ export const Hold = ({ heldPiece, canHold }) => {
   return (
     <div style={styles.container}>
       <h3 style={{ ...styles.title, opacity: canHold ? 1 : 0.4 }}>HOLD</h3>
-      <svg width="80" height="120" style={styles.svg}>
+      <svg width="120" height="160" style={styles.svg}>
         {/* Background */}
-        <rect 
-          x="0" y="0" 
-          width="80" 
-          height="120" 
-          fill="#2a2a4a" 
-          stroke="#5a5a7a" 
+        <rect
+          x="0" y="0"
+          width="120"
+          height="160"
+          fill="#2a2a4a"
+          stroke="#5a5a7a"
           strokeWidth="2"
         />
         

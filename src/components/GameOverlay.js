@@ -15,12 +15,26 @@ export const GameOverlay = ({ gameState, onStart, onResume }) => {
               PRESS ENTER TO START
             </button>
             <div style={styles.controls}>
-              <p><kbd>← →</kbd> Move</p>
-              <p><kbd>↑</kbd> Rotate</p>
-              <p><kbd>↓</kbd> Soft Drop</p>
-              <p><kbd>Space</kbd> Hard Drop</p>
-              <p><kbd>Shift</kbd> Hold</p>
-              <p><kbd>P</kbd> Pause</p>
+              <div style={styles.controlsGrid}>
+                <div style={styles.controlItem}>
+                  <kbd>← →</kbd> Move
+                </div>
+                <div style={styles.controlItem}>
+                  <kbd>↑</kbd> Rotate
+                </div>
+                <div style={styles.controlItem}>
+                  <kbd>↓</kbd> Soft Drop
+                </div>
+                <div style={styles.controlItem}>
+                  <kbd>Space</kbd> Hard Drop
+                </div>
+                <div style={styles.controlItem}>
+                  <kbd>Shift</kbd> Hold
+                </div>
+                <div style={styles.controlItem}>
+                  <kbd>P</kbd> Pause
+                </div>
+              </div>
             </div>
           </div>
         );
@@ -114,6 +128,17 @@ const styles = {
     color: '#888',
     fontFamily: '"Courier New", monospace',
     fontSize: '12px',
-    lineHeight: '2',
+  },
+  controlsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: '10px',
+    justifyContent: 'center',
+  },
+  controlItem: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    gap: '8px',
   },
 };
