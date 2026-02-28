@@ -1,7 +1,8 @@
 import React from 'react';
 
 export const GameOverlay = ({ gameState, onStart, onResume }) => {
-  if (gameState === 'playing' || gameState === 'paused') return null;
+  // Only show overlay when not playing
+  if (gameState === 'playing') return null;
 
   const renderContent = () => {
     switch (gameState) {
