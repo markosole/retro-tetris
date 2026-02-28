@@ -1,70 +1,115 @@
-# Getting Started with Create React App
+# 🎮 Tetris - Retro Edition
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A classic Tetris game built with React and the Web Audio API for synthesized sound effects.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Classic Gameplay**: Standard 10x20 Tetris board with all 7 tetromino pieces
+- **Hold Mechanic**: Press Shift to hold a piece for later use
+- **Next Queue**: Preview the next 3 pieces
+- **Scoring System**: Points for lines cleared, soft drops, and hard drops
+- **Level Progression**: Speed increases every 10 lines cleared
+- **Sound Effects**: Retro synthesized sounds for all game actions (no external audio files required)
+- **Pause Functionality**: Press P to pause/resume the game
 
-### `npm start`
+## Controls
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+| Key | Action |
+|-----|--------|
+| ← → | Move piece left/right |
+| ↑ | Rotate piece |
+| ↓ | Soft drop (move down faster) |
+| Space | Hard drop (instantly place piece) |
+| Shift | Hold current piece |
+| P | Pause/Resume game |
+| Enter | Start game / Restart after game over |
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## How to Run
 
-### `npm test`
+### Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js 14 or higher
+- npm 6 or higher
 
-### `npm run build`
+### Development Mode
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+cd my-app
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The application will open in your default browser at [http://localhost:3000](http://localhost:3000).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Production Build
 
-### `npm run eject`
+```bash
+cd my-app
+npm run build
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+This creates an optimized production bundle in the `build` folder.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Testing
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+cd my-app
+npm test
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Runs tests in watch mode. Press `q` to exit watch mode or `a` to run all tests.
 
-## Learn More
+## Project Structure
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+my-app/
+├── public/
+│   └── index.html          # HTML template
+├── src/
+│   ├── components/
+│   │   ├── Board.js        # Main game board rendering
+│   │   ├── Hold.js         # Hold piece display
+│   │   ├── NextQueue.js    # Next pieces preview
+│   │   ├── Score.js        # Score, lines, level display
+│   │   └── GameOverlay.js  # Menu/pause/gameover overlays
+│   ├── hooks/
+│   │   └── useTetris.js    # Main game logic hook
+│   ├── types/
+│   │   └── game.js         # Tetromino definitions and colors
+│   ├── utils/
+│   │   ├── game.js         # Game utility functions
+│   │   └── sounds.js       # Sound synthesis using Web Audio API
+│   ├── App.js              # Main application component
+│   └── index.js            # Entry point
+├── package.json
+└── README.md
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Technical Details
 
-### Code Splitting
+### Sound System
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+The game uses the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) to synthesize all sounds programmatically:
 
-### Analyzing the Bundle Size
+- **Move**: Short descending sine wave beep
+- **Rotate**: Rising triangle wave tone
+- **Soft Drop**: Subtle short tone
+- **Hard Drop**: Descending square wave
+- **Hold**: Rising sine tone
+- **Line Clear**: Ascending arpeggio (based on lines cleared)
+- **Game Over**: Descending sawtooth wave
+- **Pause/Resume**: Sustained sine tone
+- **Start Game**: Rising square wave
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Game Logic
 
-### Making a Progressive Web App
+The core game logic is encapsulated in the [`useTetris`](src/hooks/useTetris.js:16) custom hook, which manages:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- Board state and piece rendering
+- Movement, rotation, and collision detection
+- Line clearing and scoring
+- Level progression
+- Game states (menu, playing, paused, gameover)
 
-### Advanced Configuration
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+MIT
