@@ -1,13 +1,52 @@
-body {
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  font-family: 'Courier New', monospace;
+  background-color: #0f0f1a;
+  color: #fff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Retro font fallback */
+@font-face {
+  font-family: 'Press Start 2P';
+  src: local('Courier New'), local('monospace');
+}
+
+kbd {
+  display: inline-block;
+  padding: 4px 8px;
+  background-color: #2a2a4a;
+  border: 2px solid #5a5a7a;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: #aaa;
+  box-shadow: 0 2px 0 #3a3a5a;
+}
+
+/* Button hover effects */
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 4px 6px 0 #5a00aa !important;
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 4px 2px 0 #5a00aa !important;
+}
+
+/* Smooth transitions */
+* {
+  transition: none;
 }
