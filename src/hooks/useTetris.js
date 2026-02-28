@@ -12,6 +12,7 @@ import {
   getDropInterval,
   isGameOver,
 } from '../utils/game';
+import { soundManager } from '../utils/sounds';
 
 export function useTetris() {
   const [board, setBoard] = useState(createBoard);
@@ -53,6 +54,7 @@ export function useTetris() {
     // Check if game over on spawn
     if (!isValidPosition(board, piece.shape, piece.position)) {
       setGameState('gameover');
+      soundManager.playGameOverSound();
       return;
     }
     
@@ -63,6 +65,9 @@ export function useTetris() {
 
   // Start game
   const startGame = useCallback(() => {
+    soundManager.init();
+    soundManager.playStartSound();
+    
     setBoard(createBoard());
     setScore(0);
     setLines(0);
@@ -101,8 +106,10 @@ export function useTetris() {
   const togglePause = useCallback(() => {
     if (gameState === 'playing') {
       setGameState('paused');
+      soundManager.playPauseSound();
     } else if (gameState === 'paused') {
       setGameState('playing');
+      soundManager.playPauseSound();
     }
   }, [gameState]);
 
@@ -117,6 +124,14 @@ export function useTetris() {
     
     if (isValidPosition(board, currentPiece.shape, newPosition)) {
       setCurrentPiece({ ...currentPiece, position: newPosition });
+      
+      // Play sound based on movement type
+      if (dy === 1) {
+        soundManager.playSoftDropSound();
+      } else {
+        soundManager.playMoveSound();
+      }
+      
       return true;
     }
     return false;
@@ -131,6 +146,7 @@ export function useTetris() {
     // Try normal rotation
     if (isValidPosition(board, rotatedShape, currentPiece.position)) {
       setCurrentPiece({ ...currentPiece, shape: rotatedShape });
+      soundManager.playRotateSound();
       return;
     }
     
@@ -155,6 +171,7 @@ export function useTetris() {
           shape: rotatedShape,
           position: newPosition,
         });
+        soundManager.playRotateSound();
         return;
       }
     }
@@ -171,6 +188,9 @@ export function useTetris() {
     
     setCurrentPiece({ ...currentPiece, position: { x: currentPiece.position.x, y: newY } });
     
+    // Play hard drop sound
+    soundManager.playHardDropSound();
+    
     // Lock immediately after hard drop
     setTimeout(() => {
       const lockedBoard = lockPiece(board, { ...currentPiece, position: { x: currentPiece.position.x, y: newY } });
@@ -186,6 +206,9 @@ export function useTetris() {
         setScore(prev => prev + newScore);
         setLines(newLines);
         setLevel(newLevel);
+        
+        // Play line clear sound based on number of lines
+        soundManager.playLineClearSound(linesCleared);
       }
       
       spawnPiece();
@@ -195,6 +218,8 @@ export function useTetris() {
   // Hold piece
   const holdPiece = useCallback(() => {
     if (!currentPiece || !canHold || gameState !== 'playing') return;
+    
+    soundManager.playHoldSound();
     
     if (heldPiece === null) {
       setHeldPiece(currentPiece.type);
@@ -224,6 +249,9 @@ export function useTetris() {
     
     if (deltaTime >= dropIntervalRef.current) {
       if (!movePiece(0, 1)) {
+        // Play lock sound when piece locks
+        soundManager.playHardDropSound();
+        
         // Lock piece
         const lockedBoard = lockPiece(board, currentPiece);
         
@@ -238,6 +266,9 @@ export function useTetris() {
           setScore(prev => prev + newScore);
           setLines(newLines);
           setLevel(newLevel);
+          
+          // Play line clear sound based on number of lines
+          soundManager.playLineClearSound(linesCleared);
         }
         
         spawnPiece();
