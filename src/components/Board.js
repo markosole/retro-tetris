@@ -93,7 +93,7 @@ export const Board = ({ board, currentPiece }) => {
             y1={y * CELL_SIZE}
             x2={BOARD_WIDTH * CELL_SIZE}
             y2={y * CELL_SIZE}
-            stroke="#5a5a7a"
+            stroke="#2a2a4a"
             strokeWidth="1"
           />
         ))}
@@ -105,7 +105,7 @@ export const Board = ({ board, currentPiece }) => {
             y1="0"
             x2={x * CELL_SIZE}
             y2={BOARD_HEIGHT * CELL_SIZE}
-            stroke="#5a5a7a"
+            stroke="#2a2a4a"
             strokeWidth="1"
           />
         ))}
@@ -159,9 +159,10 @@ export const Board = ({ board, currentPiece }) => {
                       width={CELL_SIZE - 2}
                       height={CELL_SIZE - 2}
                       fill="none"
-                      stroke={TETROMINOS[currentPiece.type].color}
-                      strokeWidth="2"
-                      opacity="0.5"
+                      stroke="#5a5a7a"
+                      // stroke={TETROMINOS[currentPiece.type].color}
+                      strokeWidth="0.3"
+                      opacity="1"
                     />
                   );
                 }
