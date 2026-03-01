@@ -73,6 +73,18 @@ export function isValidPosition(board, shape, position) {
   return true;
 }
 
+// Calculate ghost piece position (where piece will land)
+export function getGhostPosition(board, shape, position) {
+  let ghostY = position.y;
+  
+  // Drop the piece until it hits something
+  while (isValidPosition(board, shape, { x: position.x, y: ghostY + 1 })) {
+    ghostY++;
+  }
+  
+  return { x: position.x, y: ghostY };
+}
+
 // Lock piece to the board
 export function lockPiece(board, piece) {
   const newBoard = board.map(row => [...row]);

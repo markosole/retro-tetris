@@ -6,6 +6,47 @@ const BOARD_HEIGHT = 20;
 const CELL_SIZE = 30;
 
 export const Board = ({ board, currentPiece }) => {
+  // Calculate ghost piece position (where piece will land)
+  const getGhostPosition = () => {
+    if (!currentPiece) return null;
+    
+    let ghostY = currentPiece.position.y;
+    
+    // Drop the piece until it hits something
+    while (isValidPosition(board, currentPiece.shape, { x: currentPiece.position.x, y: ghostY + 1 })) {
+      ghostY++;
+    }
+    
+    return { x: currentPiece.position.x, y: ghostY };
+  };
+
+  // Check if a position is valid (no collision)
+  const isValidPosition = (board, shape, position) => {
+    const rows = shape.length;
+    const cols = shape[0].length;
+    
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        if (shape[y][x] !== 0) {
+          const newX = position.x + x;
+          const newY = position.y + y;
+          
+          // Check bounds
+          if (newX < 0 || newX >= 10 || newY >= 20) {
+            return false;
+          }
+          
+          // Check collision with locked pieces (only if on board)
+          if (newY >= 0 && board[newY][newX] !== null) {
+            return false;
+          }
+        }
+      }
+    }
+    
+    return true;
+  };
+
   // Create a merged view of board + current piece for rendering
   const renderGrid = () => {
     const grid = board.map(row => [...row]);
@@ -28,6 +69,7 @@ export const Board = ({ board, currentPiece }) => {
     return grid;
   };
 
+  const ghostPosition = getGhostPosition();
   const grid = renderGrid();
 
   return (
@@ -51,7 +93,7 @@ export const Board = ({ board, currentPiece }) => {
             y1={y * CELL_SIZE}
             x2={BOARD_WIDTH * CELL_SIZE}
             y2={y * CELL_SIZE}
-            stroke="#2a2a4a"
+            stroke="#5a5a7a"
             strokeWidth="1"
           />
         ))}
@@ -63,7 +105,7 @@ export const Board = ({ board, currentPiece }) => {
             y1="0"
             x2={x * CELL_SIZE}
             y2={BOARD_HEIGHT * CELL_SIZE}
-            stroke="#2a2a4a"
+            stroke="#5a5a7a"
             strokeWidth="1"
           />
         ))}
@@ -95,6 +137,38 @@ export const Board = ({ board, currentPiece }) => {
               )}
             </g>
           ))
+        )}
+        
+        {/* Render ghost piece outline */}
+        {ghostPosition && currentPiece && (
+          <>
+            {currentPiece.shape.map((row, y) =>
+              row.map((cell, x) => {
+                if (!cell) return null;
+                
+                const boardY = ghostPosition.y + y;
+                const boardX = ghostPosition.x + x;
+                
+                // Only render if on the visible board
+                if (boardY >= 0 && boardY < 20 && boardX >= 0 && boardX < 10) {
+                  return (
+                    <rect
+                      key={`ghost-${y}-${x}`}
+                      x={boardX * CELL_SIZE + 1}
+                      y={boardY * CELL_SIZE + 1}
+                      width={CELL_SIZE - 2}
+                      height={CELL_SIZE - 2}
+                      fill="none"
+                      stroke={TETROMINOS[currentPiece.type].color}
+                      strokeWidth="2"
+                      opacity="0.5"
+                    />
+                  );
+                }
+                return null;
+              })
+            )}
+          </>
         )}
       </svg>
     </div>
