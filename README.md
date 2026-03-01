@@ -1,10 +1,10 @@
-# 🎮 Tetris - Retro Edition
+# 🎮 Bestris - Retro Edition
 
-A classic Tetris game built with React and the Web Audio API for synthesized sound effects.
+A classic game built with React and the Web Audio API for synthesized sound effects.
 
 ## Features
 
-- **Classic Gameplay**: Standard 10x20 Tetris board with all 7 tetromino pieces
+- **Classic Gameplay**: Standard 10x20 Bestris board with all 7 tetromino pieces
 - **Hold Mechanic**: Press Shift to hold a piece for later use
 - **Next Queue**: Preview the next 3 pieces
 - **Scoring System**: Points for lines cleared, soft drops, and hard drops

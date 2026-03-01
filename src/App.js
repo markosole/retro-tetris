@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+// Initialize socket client for live score updates
+import { socket } from './socketClient';
 import { useTetris } from './hooks/useTetris';
 import { Board } from './components/Board';
 import { NextQueue } from './components/NextQueue';
 import { Hold } from './components/Hold';
 import { Score } from './components/Score';
+import { Leaderboard } from './components/Leaderboard';
 import { GameOverlay } from './components/GameOverlay';
+
+const NICKNAME_STORAGE_KEY = 'tetris_nickname';
 
 function App() {
   const {
@@ -21,11 +26,34 @@ function App() {
     togglePause,
   } = useTetris();
 
+  // Load nickname from localStorage on mount
+  const [nickname, setNickname] = useState(() => {
+    return localStorage.getItem(NICKNAME_STORAGE_KEY) || '';
+  });
+
+  // Save nickname to localStorage whenever it changes
+  useEffect(() => {
+    if (nickname) {
+      localStorage.setItem(NICKNAME_STORAGE_KEY, nickname);
+    } else {
+      localStorage.removeItem(NICKNAME_STORAGE_KEY);
+    }
+  }, [nickname]);
+
+  // Auto-submit score when game ends (gameover state)
+  useEffect(() => {
+    if (gameState === 'gameover' && (score > 0 || lines > 0)) {
+      const submitNickname = nickname.trim() || 'anonymous';
+      socket.emit('submitScore', { home: score, away: lines, nickname: submitNickname });
+      console.log('Auto-submitting score:', { home: score, away: lines, nickname: submitNickname });
+    }
+  }, [gameState, score, lines, nickname]);
+
   return (
     <div style={styles.container}>
       {/* Header */}
       <header style={styles.header}>
-        <h1 style={styles.title}>🎮 TETRIS</h1>
+        <h1 style={styles.title}>🎮 BESTRIS</h1>
       </header>
 
       {/* Main game area */}
@@ -34,6 +62,7 @@ function App() {
         <aside style={styles.sidebarLeft}>
           <Hold heldPiece={heldPiece} canHold={canHold} />
           <Score score={score} lines={lines} level={level} />
+          {/* Nickname input - moved to modal, but kept for reference if needed */}
         </aside>
 
         {/* Center: Game Board */}
@@ -42,13 +71,16 @@ function App() {
           <GameOverlay 
             gameState={gameState} 
             onStart={startGame} 
-            onResume={togglePause} 
+            onResume={togglePause}
+            nickname={nickname}
+            setNickname={setNickname}
           />
         </section>
 
-        {/* Right side: Next Queue */}
+        {/* Right side: Next Queue & Leaderboard */}
         <aside style={styles.sidebarRight}>
           <NextQueue nextPieces={nextPieces} />
+          <Leaderboard />
         </aside>
       </main>
 
